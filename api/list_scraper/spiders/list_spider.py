@@ -1,11 +1,12 @@
 import scrapy
+from scrapy.crawler import CrawlerProcess
 
 class ListSpider(scrapy.Spider):
     name = "list_spider"
 
     def start_requests(self):
         yield scrapy.Request(
-            url = "https://letterboxd.com/dave/list/official-top-250-narrative-feature-films/",
+            url = self.url,
             callback = self.parse
         )
 

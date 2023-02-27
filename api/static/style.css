@@ -1,0 +1,112 @@
+html {
+    background-color: rgb(21, 24, 28);
+    color: rgb(156, 170, 185);
+    text-align: center;
+    font-family: "Lato", sans-serif;
+    margin: 20px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#header {
+    margin: 40px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: rgb(105, 119, 134);
+}
+
+
+h1, .list-name {
+    color: rgb(217, 224, 231);
+    font-family: "Merriweather Sans", sans-serif;
+    font-weight: 800;
+}
+
+.user-name {
+    font-style: italic;
+}
+
+#info-text {
+    color: rgb(199, 204, 210);
+}
+
+div {
+    margin: 5px;
+}
+
+#input-form {
+    margin: 10px 40px;
+}
+
+.url-input > input {
+    background-color: rgb(31, 36, 43);
+    color: rgb(88, 102, 117);
+    font-family: "Lato", sans-serif;
+    font-style: italic;
+    border: none;
+    border-radius: 3px;
+    outline: none;
+    padding: 7px;
+    margin: 3px;
+    width: 50%;
+    border: 1px solid rgb(31, 36, 43);
+}
+
+.url-input > input:active,.url-input > input:focus {
+    border: 1px solid rgb(88, 102, 117);
+}
+
+#submit-button {
+    text-transform: uppercase;
+    color: rgb(202, 212, 223);
+    background-color: rgb(88, 102, 117);
+    letter-spacing: 0.75px;
+    font-family: "Lato", sans-serif;
+    font-weight: 700;
+    border: none;
+    border-radius: 3px;
+    padding: 7px;
+    margin: 20px;
+}
+
+
+#submit-button:hover {
+    color: rgb(218, 227, 238);
+    background-color: rgb(101, 117, 135);
+}
+
+#submit-button:active {
+    color: rgb(188, 196, 206);
+    background-color: rgb(79, 92, 105);
+}
+
+#list-stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+#list-stats > div {
+    margin: 0px 40px;
+}
+
+#shared-movies-list {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.movie {
+    font-style: italic;
+    color: rgb(217, 224, 231);
+    margin: 2px;
+}
+
+.movie:hover {
+    color: rgb(105, 119, 134);
+}

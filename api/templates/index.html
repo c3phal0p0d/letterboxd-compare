@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">  
+    <title>Letterboxd Compare</title>
+    {% endblock %}
+</head>
+<body>
+    <div id="header">
+        <h1>Letterboxd Compare</h1>
+        <div id="info-text">A simple tool for comparing any two user-created Letterboxd lists.</div>
+    </div>
+
+    <div id="input-form">
+        <form method="post">
+            <div class="url-input">
+                <label for="list-1-url">Full URL of the first list: </label>
+                <input name="list-1-url" id="list-1-url" autocomplete="off" required>
+            </div>
+            <div class="url-input">
+                <label for="list-2-url">Full URL of the second list: </label>
+                <input name="list-2-url" id="list-2-url" autocomplete="off" required>
+            </div>
+            <input type="submit" id="submit-button" value="Compare">
+        </form>
+    </div>
+
+    <div id="comparison-stats">
+        <div id="list-stats">
+            <div id="list-1-stats">
+                <h2><span class="list-name">[List]</span> by <span class="user-name">[user]</span></h2>
+                <div>Number of movies: [0]</div>
+                <div>Similarity: [0]/[0] ([0]%)</div>
+            </div>
+            <div id="list-2-stats">
+                <h2><span class="list-name">[List]</span> by <span class="user-name">[user]</span></h2>
+                <div>Number of movies: [0]</div>
+                <div>Similarity: [0]/[0] ([0]%)</div>
+            </div>
+        </div>
+        <div id="shared-stats">
+            <div>Number of movies on both lists: [0]</div>
+            <div>Movies that are on both lists: </div>
+            <div id="shared-movies-list">
+                <a class="movie 1" href="https://letterboxd.com/film/fight-club/">Fight Club</a>
+                <a class="movie 2" href="https://letterboxd.com/film/eraserhead/">Eraserhead</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -24,11 +24,11 @@
         <form method="post">
             <div class="url-input">
                 <label for="list-1-url">Full URL of the first list: </label>
-                <input name="list-1-url" id="list-1-url" autocomplete="off" required>
+                <input name="list-1-url" id="list-1-url" autocomplete="off">
             </div>
             <div class="url-input">
                 <label for="list-2-url">Full URL of the second list: </label>
-                <input name="list-2-url" id="list-2-url" autocomplete="off" required>
+                <input name="list-2-url" id="list-2-url" autocomplete="off">
             </div>
             <input type="submit" id="submit-button" value="Compare">
         </form>
@@ -60,7 +60,7 @@
     </div>
     {% elif input_submitted %}
         <div id="sad-emoticon">(🄌 ヘ🄌 )</div>
-        <div>One or both URLS are invalid, please input correct URLs to existing Letterboxd lists.</div>
+        <div>One or both URLS are invalid, please only input correct URLs to existing Letterboxd lists.</div>
     {% endif %}
 </body>
 </html>

@@ -110,3 +110,8 @@ div {
 .movie:hover {
     color: rgb(105, 119, 134);
 }
+
+#sad-emoticon {
+    font-size: 20px;
+    letter-spacing: 5px;
+}

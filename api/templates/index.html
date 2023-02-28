@@ -55,11 +55,12 @@
                 {% for movie in data.combined.shared_movies %}
                     <a class="movie">{{movie}}</a>
                 {% endfor %}
-                <!-- <a class="movie 1" href="https://letterboxd.com/film/fight-club/">{{data.combined.shared_movies[0]}}</a>
-                <a class="movie 2" href="https://letterboxd.com/film/eraserhead/">{{data.combined.shared_movies[1]}}</a> -->
             </div>
         </div>
     </div>
+    {% elif input_submitted %}
+        <div id="sad-emoticon">(🄌 ヘ🄌 )</div>
+        <div>One or both URLS are invalid, please input correct URLs to existing Letterboxd lists.</div>
     {% endif %}
 </body>
 </html>

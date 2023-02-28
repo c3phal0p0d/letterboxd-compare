@@ -18,6 +18,12 @@ import os
 
 app = Flask(__name__)
 
+def delete_json_files():
+    os.remove("list_1.json")
+    os.remove("list_1_info.json")
+    os.remove("list_2.json")
+    os.remove("list_2_info.json")
+
 @app.route("/", methods = ["POST", "GET"])
 def index():
     if request.method == "POST":
@@ -29,9 +35,11 @@ def index():
         url_1 = request.args.get("url_1", None)
         url_2 = request.args.get("url_2", None)
         if url_1 and url_2:
+            input_submitted=True
             scrape_lists(url_1, url_2)
             data = parse_lists()
-            return render_template("index.html", data=data)
+            delete_json_files()
+            return render_template("index.html", data=data, input_submitted=input_submitted)
         else:
             return render_template("index.html")
     
@@ -39,50 +47,49 @@ def parse_lists():
     data = {}
 
     # read saved json data
-    with open("list_1.json", "r") as f:
-        list_1_data = json.load(f)[0]
+    try:
+        with open("list_1.json", "r") as f:
+            list_1_data = json.load(f)[0]
 
-    with open("list_1_info.json", "r") as f:
-        list_1_info_data = json.load(f)[0]
+        with open("list_1_info.json", "r") as f:
+            list_1_info_data = json.load(f)[0]
 
-    with open("list_2.json", "r") as f:
-        list_2_data = json.load(f)[0]
+        with open("list_2.json", "r") as f:
+            list_2_data = json.load(f)[0]
 
-    with open("list_2_info.json", "r") as f:
-        list_2_info_data = json.load(f)[0]
+        with open("list_2_info.json", "r") as f:
+            list_2_info_data = json.load(f)[0]
 
-    # find movies that appear on both lists
-    shared_movies = list(set([list(list_1_data[i].values())[1] for i in list_1_data]).intersection(set([list(list_2_data[i].values())[1] for i in list_2_data])))
-    print(shared_movies)
-    
-    # set variables
-    data["combined"] = {
-        "num_shared_movies": len(shared_movies),
-        "shared_movies": shared_movies
-    }
+        # find movies that appear on both lists
+        shared_movies = list(set([list(list_1_data[i].values())[1] for i in list_1_data]).intersection(set([list(list_2_data[i].values())[1] for i in list_2_data])))
+        print(shared_movies)
+        
+        # set variables
+        data["combined"] = {
+            "num_shared_movies": len(shared_movies),
+            "shared_movies": shared_movies
+        }
 
-    data["list_1"] = {
-        "name": list(list_1_info_data.values())[0],
-        "creator": list(list_1_info_data.values())[1],
-        "num_movies": len(list_1_data.keys()),
-    }
-    data["list_1"]["similarity_percentage"] = int(round((data["combined"]["num_shared_movies"]/data["list_1"]["num_movies"]*100), 0))
-    print(data["list_1"])
+        data["list_1"] = {
+            "name": list(list_1_info_data.values())[0],
+            "creator": list(list_1_info_data.values())[1],
+            "num_movies": len(list_1_data.keys()),
+        }
+        data["list_1"]["similarity_percentage"] = int(round((data["combined"]["num_shared_movies"]/data["list_1"]["num_movies"]*100), 0))
+        print(data["list_1"])
 
-    data["list_2"] = {
-        "name": list(list_2_info_data.values())[0],
-        "creator": list(list_2_info_data.values())[1],
-        "num_movies": len(list_2_data.keys()),
-    }
-    data["list_2"]["similarity_percentage"] = int(round((data["combined"]["num_shared_movies"]/data["list_2"]["num_movies"]*100), 0))
+        data["list_2"] = {
+            "name": list(list_2_info_data.values())[0],
+            "creator": list(list_2_info_data.values())[1],
+            "num_movies": len(list_2_data.keys()),
+        }
+        data["list_2"]["similarity_percentage"] = int(round((data["combined"]["num_shared_movies"]/data["list_2"]["num_movies"]*100), 0))
 
-    # delete json files that were created
-    os.remove("list_1.json")
-    os.remove("list_1_info.json")
-    os.remove("list_2.json")
-    os.remove("list_2_info.json")
+        return data
 
-    return data
+    except:
+        print("Invalid urls")
+        
 
 def f(queue, spider, url, settings):
     try:
@@ -161,5 +168,6 @@ def scrape_lists(url_1, url_2):
         # yield list_2_runner.crawl(ListSpider, url=url_2)
         # yield list_2_info_runner.crawl(ListInfoSpider, url=url_2)
     crawl()
+    
 
 

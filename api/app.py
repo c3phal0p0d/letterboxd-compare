@@ -3,6 +3,7 @@ from list_scraper.spiders.list_info_spider import ListInfoSpider
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
 from twisted.internet import reactor, defer
+from multiprocessing import Process, Queue
 
 from flask import (
     Flask,
@@ -83,44 +84,82 @@ def parse_lists():
 
     return data
 
+def f(queue, spider, url, settings):
+    try:
+        runner = CrawlerRunner(settings)
+        deferred = runner.crawl(spider, url=url)
+        deferred.addBoth(lambda _: reactor.stop())
+        reactor.run()
+        queue.put(None)
+    except Exception as e:
+        queue.put(e)
+
 def scrape_lists(url_1, url_2):
     configure_logging()
 
-    # scrape first list & its info
-    list_1_runner = CrawlerRunner(settings={
-        "FEEDS": {
-            "list_1.json": {"format":"json"},
-        },
-    })
+    # # scrape first list & its info
+    # list_1_runner = CrawlerRunner(settings={
+    #     "FEEDS": {
+    #         "list_1.json": {"format":"json"},
+    #     },
+    # })
 
-    list_1_info_runner = CrawlerRunner(settings={
-        "FEEDS": {
-            "list_1_info.json": {"format":"json"},
-        },
-    })
+    # list_1_info_runner = CrawlerRunner(settings={
+    #     "FEEDS": {
+    #         "list_1_info.json": {"format":"json"},
+    #     },
+    # })
 
     
-    # scrape second list & its info
-    list_2_process = CrawlerRunner(settings={
-        "FEEDS": {
-            "list_2.json": {"format":"json"},
-        },
-    })
+    # # scrape second list & its info
+    # list_2_runner = CrawlerRunner(settings={
+    #     "FEEDS": {
+    #         "list_2.json": {"format":"json"},
+    #     },
+    # })
 
-    list_2_info_process = CrawlerRunner(settings={
-        "FEEDS": {
-            "list_2_info.json": {"format":"json"},
-        },
-    })
+    # list_2_info_runner = CrawlerRunner(settings={
+    #     "FEEDS": {
+    #         "list_2_info.json": {"format":"json"},
+    #     },
+    # })
+
+    def run_spider(spider, url, settings):
+
+        queue = Queue()
+        process = Process(target=f, args=(queue, spider, url, settings,))
+        process.start()
+        result = queue.get()
+        process.join()
+
+        if result is not None:
+            raise result
     
-    @defer.inlineCallbacks
     def crawl():
-        yield list_1_runner.crawl(ListSpider, url=url_1)
-        yield list_1_info_runner.crawl(ListInfoSpider, url=url_1)
-        yield list_2_process.crawl(ListSpider, url=url_2)
-        yield list_2_info_process.crawl(ListInfoSpider, url=url_2)
-
-        reactor.stop()
-
+        run_spider(ListSpider, url=url_1, settings={
+            "FEEDS": {
+                "list_1.json": {"format":"json"},
+            },
+        })
+        run_spider(ListInfoSpider, url=url_1, settings={
+            "FEEDS": {
+                "list_1_info.json": {"format":"json"},
+            },
+        })
+        run_spider(ListSpider, url=url_2, settings={
+            "FEEDS": {
+                "list_2.json": {"format":"json"},
+            },
+        })
+        run_spider(ListInfoSpider, url=url_2, settings={
+            "FEEDS": {
+                "list_2_info.json": {"format":"json"},
+            },
+        })
+        # yield list_1_runner.crawl(ListSpider, url=url_1)
+        # yield list_1_info_runner.crawl(ListInfoSpider, url=url_1)
+        # yield list_2_runner.crawl(ListSpider, url=url_2)
+        # yield list_2_info_runner.crawl(ListInfoSpider, url=url_2)
     crawl()
-    reactor.run()
+
+

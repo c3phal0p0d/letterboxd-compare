@@ -1,3 +1,2 @@
 Flask
 scrapy
-list_scraper

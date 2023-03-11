@@ -1,5 +1,5 @@
 # Letterboxd Compare
-Tool to compare two Letterboxd lists, at the moment only those created by users.  
+Tool to compare two Letterboxd lists, at the moment only those created by users (rather than the default ones such as likes/watched/etc). Utilizes the Scrapy library to scrape the list information & Flask as the web framework.
 
 ## Installation
 - Clone repository using the command ```git clone https://github.com/c3phal0p0d/letterboxd-compare.git```  
